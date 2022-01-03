@@ -1,11 +1,12 @@
 const SHA256 = require("crypto-js/sha256");
 
 class Block {
-      constructor(index, timestamp, transactions, previousHash = "") {
-            this.timestamp = timestamp;
-            this.transactions = transactions;
-            this.previousHash = previousHash;
+      constructor(_timestamp, _transactions = [], _previousHash = "") {
+            this.timestamp = _timestamp;
+            this.transactions = _transactions;
+            this.previousHash = _previousHash;
             this.nonce = 0;
+
             this.hash = this.calculateHash();
       }
 
@@ -29,6 +30,14 @@ class Block {
             }
 
             console.log("block mined; " + this.hash);
+      }
+
+      hasValidTransactions() {
+            for (let tx of this.transactions) {
+                  if (!tx.isValid()) return false;
+            }
+
+            return true;
       }
 }
 
